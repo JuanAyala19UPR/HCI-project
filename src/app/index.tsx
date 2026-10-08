@@ -1,13 +1,7 @@
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { useState } from "react";
-import {
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const GREEN_BACKGROUND = "#7C9473";
@@ -40,8 +34,13 @@ function BackgroundPattern() {
 }
 
 export default function LoginScreen() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  function handleLogin() {
+    router.replace("/(tabs)/home");
+  }
 
   return (
     <View style={styles.container}>
@@ -93,6 +92,7 @@ export default function LoginScreen() {
               styles.loginButton,
               pressed && styles.pressed,
             ]}
+            onPress={handleLogin}
           >
             <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
           </Pressable>
@@ -115,7 +115,11 @@ const styles = StyleSheet.create({
     backgroundColor: GREEN_BACKGROUND,
   },
   pattern: {
-    ...StyleSheet.absoluteFillObject,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: "space-evenly",
   },
   patternRow: {
