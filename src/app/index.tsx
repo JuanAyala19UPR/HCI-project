@@ -16,7 +16,7 @@ export default function LoginScreen() {
     }
     setError('');
     // Demo only: connect an authentication service before production.
-    router.replace('/(tabs)');
+    router.replace('/(tabs)/home');
   }
   return (
     <View style={styles.container}>
