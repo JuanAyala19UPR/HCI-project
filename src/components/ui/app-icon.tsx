@@ -1,6 +1,9 @@
 import { Image } from 'expo-image';
 
 const paths = {
+  chevronLeft: '<path d="m15 6-6 6 6 6"/>',
+  chevronRight: '<path d="m9 6 6 6-6 6"/>',
+  chevronDown: '<path d="m6 9 6 6 6-6"/>',
   tasks: '<path d="m3 6 1.5 1.5L7 5M10 6h11M3 12h4m3 0h11m-18 6 1.5 1.5L7 17m3 1h11"/>',
   calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4m8-4v4"/>',
   payments: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',

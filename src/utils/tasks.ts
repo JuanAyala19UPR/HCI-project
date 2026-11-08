@@ -1,5 +1,5 @@
 export const CURRENT_USER = 'Natalia';
-export const HOUSE_MEMBERS = ['Natalia', 'Alejandro', 'Juan', 'José'] as const;
+export const HOUSE_MEMBERS = ['Natalia', 'Alejandro', 'Juan', 'José', 'Roberto'] as const;
 export const REPEAT_OPTIONS = ['No se repite', 'Diario', 'Cada 3 días', 'Semanal', 'Quincenal', 'Mensual'] as const;
 export type RepeatInterval = (typeof REPEAT_OPTIONS)[number];
 
@@ -56,7 +56,7 @@ export function validateTask(draft: TaskDraft): Partial<Record<keyof TaskDraft, 
   return errors;
 }
 
-export const INITIAL_TASKS: Task[] = [
+const NATALIA_TASKS: Task[] = [
   ['Comprar comida', '2026-04-24', 'No se repite', ''],
   ['Lavar la ropa', '2026-04-26', 'Semanal', '2026-06-26'],
   ['Organizar despensa', '2026-04-23', 'Quincenal', '2026-07-23'],
@@ -68,3 +68,19 @@ export const INITIAL_TASKS: Task[] = [
   id: `sample-${index}`, text, dueDate, repeatInterval: repeatInterval as RepeatInterval,
   repeatUntil, assignedTo: CURRENT_USER, notes: '', completed: false,
 }));
+
+export const INITIAL_TASKS: Task[] = [
+  ...NATALIA_TASKS,
+  ...([
+    ['Limpiar la cocina', 'Alejandro', '2026-04-25', 'Semanal', '2026-06-25', false],
+    ['Sacar la basura', 'José', '2026-04-22', 'Diario', '2026-05-22', true],
+    ['Regar plantas', 'Juan', '2026-04-23', 'Cada 3 días', '2026-05-23', false],
+    ['Limpieza general', 'José', '2026-04-22', 'Semanal', '2026-06-22', false],
+    ['Cocinar cena', 'José', '2026-04-22', 'Diario', '2026-05-22', false],
+    ['Compras supermercado', 'Roberto', '2026-04-24', 'Semanal', '2026-06-24', false],
+    ['Revisar cuentas', 'Alejandro', '2026-04-25', 'No se repite', '', false],
+    ['Hacer ejercicio', 'Natalia', '2026-04-22', 'Diario', '2026-05-22', true],
+  ] satisfies [string, string, string, RepeatInterval, string, boolean][]).map(([text, assignedTo, dueDate, repeatInterval, repeatUntil, completed], index) => ({
+    id: `household-${index}`, text, assignedTo, dueDate, repeatInterval, repeatUntil, completed, notes: '',
+  })),
+];

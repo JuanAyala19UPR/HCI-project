@@ -25,7 +25,7 @@ export default function AppTabsLayout() {
           <TabSlot style={styles.slot} />
           <TabList style={[styles.bar, { paddingBottom: Math.max(insets.bottom, 4) }]}>
             <TabTrigger name="home" href="/(tabs)/home" asChild><TabButton icon="tasks">Tareas</TabButton></TabTrigger>
-            <TabTrigger name="agenda" href="/(tabs)/agenda" asChild><TabButton icon="calendar">Agenda</TabButton></TabTrigger>
+            <TabTrigger name="weekly_schedule" href="/(tabs)/weekly_schedule" asChild><TabButton icon="calendar">Agenda</TabButton></TabTrigger>
             <TabTrigger name="payments" href="/(tabs)/payments" asChild><TabButton icon="payments">Pagos</TabButton></TabTrigger>
             <TabTrigger name="household" href="/(tabs)/household" asChild><TabButton icon="household">Hogar</TabButton></TabTrigger>
             <TabTrigger name="settings" href="/(tabs)/settings" asChild><TabButton icon="settings">Ajustes</TabButton></TabTrigger>
