@@ -1,226 +1,84 @@
-import { Image } from "expo-image";
-import { useState } from "react";
-import {
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-
-const GREEN_BACKGROUND = "#7C9473";
-const PATTERN_ROWS = 8;
-const PATTERN_COLS = 6;
-
-function BackgroundPattern() {
-  const rows = Array.from({ length: PATTERN_ROWS });
-  const cols = Array.from({ length: PATTERN_COLS });
-
-  return (
-    <View style={styles.pattern} pointerEvents="none">
-      {rows.map((_, rowIndex) => (
-        <View
-          key={rowIndex}
-          style={[
-            styles.patternRow,
-            rowIndex % 2 === 1 && styles.patternRowOffset,
-          ]}
-        >
-          {cols.map((_, colIndex) => (
-            <Text key={colIndex} style={styles.patternIcon}>
-              🛡
-            </Text>
-          ))}
-        </View>
-      ))}
-    </View>
-  );
-}
+import { Image } from 'expo-image';
+import { router } from 'expo-router';
+import { useState } from 'react';
+import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { BackgroundPattern } from '@/components/background-pattern';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  function handleLogin() {
+    if (!email.trim() || !password) {
+      setError('Ingresa tu correo electrónico y contraseña.');
+      return;
+    }
+    setError('');
+    // Demo only: connect an authentication service before production.
+    router.replace('/(tabs)');
+  }
   return (
     <View style={styles.container}>
       <BackgroundPattern />
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.card}>
-          <Image
-            source={require("@/assets/images/icon.png")}
-            style={styles.logo}
-            contentFit="cover"
-          />
-
-          <Text style={styles.title}>Bienvenido</Text>
-          <Text style={styles.subtitle}>Gestiona tu hogar fácilmente</Text>
-
-          <View style={styles.field}>
-            <Text style={styles.label}>Correo electrónico</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="tu@email.com"
-              placeholderTextColor="#9CA3AF"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              value={email}
-              onChangeText={setEmail}
-            />
-          </View>
-
-          <View style={styles.field}>
-            <Text style={styles.label}>Contraseña</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="••••••••"
-              placeholderTextColor="#9CA3AF"
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-            />
-          </View>
-
-          <Pressable style={styles.forgotPasswordWrapper}>
-            <Text style={styles.forgotPasswordText}>
-              ¿Olvidaste tu contraseña?
-            </Text>
-          </Pressable>
-
-          <Pressable
-            style={({ pressed }) => [
-              styles.loginButton,
-              pressed && styles.pressed,
-            ]}
-          >
-            <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
-          </Pressable>
-
-          <View style={styles.signUpRow}>
-            <Text style={styles.signUpText}>¿No tienes cuenta? </Text>
-            <Pressable>
-              <Text style={styles.signUpLink}>Regístrate</Text>
-            </Pressable>
-          </View>
-        </View>
+      <SafeAreaView style={styles.flex}>
+        <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content}>
+            <View style={styles.card}>
+              <Image
+                source={require('@/assets/images/kassaroomie.png')}
+                accessibilityLabel="Kassa Roomie"
+                style={styles.logo}
+                contentFit="contain"
+              />
+              <Text role="heading" style={styles.title}>Bienvenido</Text>
+              <Text style={styles.subtitle}>Gestiona tu hogar fácilmente</Text>
+              <View style={styles.field}>
+                <Text style={styles.label}>Correo electrónico</Text>
+                <TextInput accessibilityLabel="Correo electrónico" style={styles.input} placeholder="tu@email.com" placeholderTextColor="#7C8191" autoCapitalize="none" autoCorrect={false} autoComplete="email" keyboardType="email-address" value={email} onChangeText={setEmail} />
+              </View>
+              <View style={styles.field}>
+                <Text style={styles.label}>Contraseña</Text>
+                <TextInput accessibilityLabel="Contraseña" style={styles.input} placeholder="••••••••" placeholderTextColor="#7C8191" secureTextEntry autoCapitalize="none" autoComplete="current-password" returnKeyType="go" onSubmitEditing={handleLogin} value={password} onChangeText={setPassword} />
+              </View>
+              <Pressable accessibilityRole="button" style={styles.forgot} onPress={() => Alert.alert('Recuperar contraseña', 'La recuperación de contraseña estará disponible próximamente.')}>
+                <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
+              </Pressable>
+              {error ? <Text accessibilityRole="alert" accessibilityLiveRegion="polite" style={styles.error}>{error}</Text> : null}
+              <Pressable accessibilityRole="button" onPress={handleLogin} style={({ pressed }) => [styles.button, pressed && { opacity: 0.8 }]}>
+                <Text style={styles.buttonText}>Iniciar Sesión</Text>
+              </Pressable>
+              <View style={styles.signUpRow}>
+                <Text style={styles.signUpText}>¿No tienes cuenta? </Text>
+                <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => Alert.alert('Regístrate', 'El registro de cuentas estará disponible próximamente.')}>
+                  <Text style={[styles.link, { fontWeight: '600' }]}>Regístrate</Text>
+                </Pressable>
+              </View>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: GREEN_BACKGROUND,
-  },
-  pattern: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "space-evenly",
-  },
-  patternRow: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-  patternRowOffset: {
-    marginLeft: 24,
-  },
-  patternIcon: {
-    fontSize: 22,
-    color: "#000000",
-    opacity: 0.08,
-  },
-  safeArea: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 24,
-  },
-  card: {
-    width: "100%",
-    maxWidth: 360,
-    backgroundColor: "#ffffff",
-    borderRadius: 24,
-    paddingHorizontal: 24,
-    paddingVertical: 32,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 20,
-    elevation: 8,
-  },
-  logo: {
-    width: 128,
-    height: 80,
-    borderRadius: 12,
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: "700",
-    color: "#111827",
-  },
-  subtitle: {
-    fontSize: 14,
-    color: "#6B7280",
-    marginTop: 4,
-    marginBottom: 24,
-  },
-  field: {
-    width: "100%",
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#374151",
-    marginBottom: 6,
-  },
-  input: {
-    width: "100%",
-    backgroundColor: "#F3F4F6",
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 15,
-    color: "#111827",
-  },
-  forgotPasswordWrapper: {
-    alignSelf: "flex-end",
-    marginBottom: 20,
-  },
-  forgotPasswordText: {
-    fontSize: 13,
-    color: "#3B82F6",
-    fontWeight: "500",
-  },
-  loginButton: {
-    width: "100%",
-    backgroundColor: "#5B7FE0",
-    borderRadius: 12,
-    paddingVertical: 14,
-    alignItems: "center",
-  },
-  pressed: {
-    opacity: 0.85,
-  },
-  loginButtonText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontWeight: "700",
-  },
-  signUpRow: {
-    flexDirection: "row",
-    marginTop: 20,
-  },
-  signUpText: {
-    fontSize: 14,
-    color: "#374151",
-  },
-  signUpLink: {
-    fontSize: 14,
-    color: "#3B82F6",
-    fontWeight: "700",
-  },
+  container: { flex: 1, backgroundColor: '#87a96b' },
+  flex: { flex: 1 },
+  content: { flexGrow: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
+  card: { width: '100%', maxWidth: 448, backgroundColor: '#FFFFFF', borderRadius: 24, paddingHorizontal: 28, paddingVertical: 32, alignItems: 'center', shadowColor: '#263818', shadowOffset: { width: 0, height: 16 }, shadowOpacity: 0.24, shadowRadius: 24, elevation: 8 },
+  logo: { width: 144, height: 96, marginBottom: 24 },
+  title: { fontSize: 30, fontWeight: '700', color: '#242B3B', textAlign: 'center' },
+  subtitle: { fontSize: 15, color: '#606A7C', marginTop: 8, marginBottom: 32, textAlign: 'center' },
+  field: { width: '100%', marginBottom: 20 },
+  label: { fontSize: 14, fontWeight: '500', color: '#424D62', marginBottom: 6 },
+  input: { width: '100%', minHeight: 48, backgroundColor: '#F3F3F5', borderRadius: 9, paddingHorizontal: 14, paddingVertical: 12, fontSize: 15, color: '#242B3B' },
+  forgot: { alignSelf: 'flex-end', minHeight: 44, justifyContent: 'center', marginBottom: 12 },
+  link: { fontSize: 14, color: '#385DE0' },
+  error: { color: '#B42318', marginBottom: 12, alignSelf: 'stretch', fontSize: 14 },
+  button: { width: '100%', minHeight: 48, backgroundColor: '#5078FF', borderRadius: 8, padding: 14, alignItems: 'center', justifyContent: 'center' },
+  buttonText: { color: '#FFFFFF', fontSize: 18, fontWeight: '600', textAlign: 'center' },
+  signUpRow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', marginTop: 16 },
+  signUpText: { fontSize: 14, color: '#606A7C' },
+  linkButton: { minHeight: 44, justifyContent: 'center' },
 });
