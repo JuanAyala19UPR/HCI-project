@@ -50,7 +50,7 @@ export default function LoginScreen() {
               </Pressable>
               <View style={styles.signUpRow}>
                 <Text style={styles.signUpText}>¿No tienes cuenta? </Text>
-                <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => Alert.alert('Regístrate', 'El registro de cuentas estará disponible próximamente.')}>
+                <Pressable accessibilityRole="button" style={styles.linkButton} onPress={() => router.push('/register')}>
                   <Text style={[styles.link, { fontWeight: '600' }]}>Regístrate</Text>
                 </Pressable>
               </View>
