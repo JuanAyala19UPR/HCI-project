@@ -1,4 +1,1 @@
-import { SectionPlaceholder } from '@/components/section-placeholder';
-export default function HouseholdScreen() {
-  return <SectionPlaceholder title="Hogar" icon="household" />;
-}
+export { HouseholdScreen as default } from '@/components/household/household-screen';

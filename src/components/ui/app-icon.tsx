@@ -1,6 +1,11 @@
 import { Image } from 'expo-image';
 
 const paths = {
+  home: '<path d="m3 10 9-7 9 7v11H3Z"/><path d="M9 21V12h6v9"/>',
+  copy: '<rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H3v13h5"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>',
+  phone: '<path d="m4 3 4 1 1 5-3 2a15 15 0 0 0 7 7l2-3 5 1 1 4c-1 3-7 2-12-3S1 4 4 3Z"/>',
+  crown: '<path d="m3 7 5 4 4-8 4 8 5-4-2 12H5ZM5 22h14"/>',
   chevronLeft: '<path d="m15 6-6 6 6 6"/>',
   chevronRight: '<path d="m9 6 6 6-6 6"/>',
   chevronDown: '<path d="m6 9 6 6 6-6"/>',
