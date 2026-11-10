@@ -1,13 +1,15 @@
+import { useThemedStyles } from '@/contexts/appearance-context';
 import { useState } from 'react';
 import { Modal, Pressable, SectionList, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TaskEditor } from '@/components/tasks/task-editor';
 import { AppIcon } from '@/components/ui/app-icon';
 import { useTasks } from '@/contexts/task-context';
-import { styles } from '@/styles/tasks.styles';
+import { styles as baseStyles } from '@/styles/tasks.styles';
 import { CURRENT_USER, formatTaskDate, type Task } from '@/utils/tasks';
 
 export function TaskListScreen() {
+  const styles = useThemedStyles(baseStyles);
   const { tasks, saveTask, deleteTask, toggleTask } = useTasks();
   const [query, setQuery] = useState('');
   const [editor, setEditor] = useState<{ task: Task | null } | null>(null);

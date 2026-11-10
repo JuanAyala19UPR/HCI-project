@@ -1,12 +1,15 @@
+import { useThemedStyles } from '@/contexts/appearance-context';
 import { Tabs, TabList, TabSlot, TabTrigger, type TabTriggerSlotProps } from 'expo-router/ui';
 import { Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BackgroundPattern } from '@/components/background-pattern';
 import { AppIcon, type AppIconName } from '@/components/ui/app-icon';
 import { TaskProvider } from '@/contexts/task-context';
-import { styles } from '@/styles/app-tabs.styles';
+import { OnboardingTour } from '@/components/onBoardingTour';
+import { styles as baseStyles } from '@/styles/app-tabs.styles';
 
 function TabButton({ children, isFocused, icon, ...props }: TabTriggerSlotProps & { icon: AppIconName }) {
+  const styles = useThemedStyles(baseStyles);
   return (
     <Pressable {...props} accessibilityRole="tab" accessibilityState={{ selected: isFocused }} style={({ pressed }) => [styles.tab, pressed && styles.pressed]}>
       <AppIcon name={icon} color={isFocused ? '#5369FF' : '#788092'} size={23} />
@@ -16,6 +19,7 @@ function TabButton({ children, isFocused, icon, ...props }: TabTriggerSlotProps 
 }
 
 export default function AppTabsLayout() {
+  const styles = useThemedStyles(baseStyles);
   const insets = useSafeAreaInsets();
   return (
     <TaskProvider>
@@ -31,6 +35,7 @@ export default function AppTabsLayout() {
             <TabTrigger name="settings" href="/(tabs)/settings" asChild><TabButton icon="settings">Ajustes</TabButton></TabTrigger>
           </TabList>
         </Tabs>
+        <OnboardingTour />
       </View>
     </TaskProvider>
   );

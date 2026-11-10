@@ -1,5 +1,7 @@
+import { styles as baseStyles } from '@/styles/payments.styles';
+import { useAppearance, useThemedStyles } from '@/contexts/appearance-context';
 import { useState } from 'react';
-import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppIcon } from '@/components/ui/app-icon';
 const HOUSE_MEMBERS = ['Natalia', 'Alejandro', 'Juan', 'José'];
@@ -31,10 +33,13 @@ function getBalances(payments: Payment[]) {
   return transfers;
 }
 function Badge({ category }: { category: Category }) {
-  return <Text style={[s.badge, { backgroundColor: categories[category][0], color: categories[category][1] }]}>{category}</Text>;
+  const s = useThemedStyles(baseStyles);
+  const { dark } = useAppearance();
+  return <Text style={[s.badge, { backgroundColor: dark ? '#303030' : categories[category][0], color: dark ? '#FFFFFF' : categories[category][1] }]}>{category}</Text>;
 }
 
 export function PaymentsScreen() {
+  const s = useThemedStyles(baseStyles);
   const [payments, setPayments] = useState(seed);
   const [dialog, setDialog] = useState<'add' | 'help' | null>(null);
   const [draft, setDraft] = useState(blank);
@@ -85,40 +90,3 @@ export function PaymentsScreen() {
     </Modal>
   </View>;
 }
-
-const s = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#FFFFFF' }, content: { paddingBottom: 24 },
-  header: { backgroundColor: '#819D34', paddingHorizontal: 24, paddingBottom: 24, paddingTop: 24 },
-  row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
-  title: { fontSize: 30, fontWeight: '700', color: '#FFFFFF', flexShrink: 1 },
-  icon: { minHeight: 44, minWidth: 44, alignItems: 'center', justifyContent: 'center' },
-  help: { color: '#FFFFFF', fontSize: 11, fontWeight: '700', borderWidth: 1, borderColor: '#FFFFFF', borderRadius: 7, width: 14, height: 14, lineHeight: 12, textAlign: 'center' },
-  headerNote: { fontSize: 13, color: '#FFFFFF', marginVertical: 12 },
-  summary: { flex: 1, borderRadius: 14, padding: 16, backgroundColor: '#FFFFFF25', gap: 6, minHeight: 108 },
-  summaryNote: { color: '#FFFFFF', fontSize: 12 },
-  white: { color: '#FFFFFF', fontSize: 13 }, amount: { color: '#FFFFFF', fontSize: 25, fontWeight: '700' },
-  card: { marginHorizontal: 16, marginTop: 12, padding: 16, borderRadius: 16, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#F3F4F6', shadowColor: '#000000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 2, elevation: 1 },
-  label: { fontSize: 13, fontWeight: '600', color: '#424D62', marginBottom: 10 },
-  wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, alignItems: 'center' },
-  badge: { borderRadius: 8, paddingHorizontal: 9, paddingVertical: 3, fontSize: 11, fontWeight: '500', overflow: 'hidden' },
-  section: { marginHorizontal: 16, marginTop: 20, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
-  heading: { fontSize: 18, fontWeight: '600', color: '#424D62' },
-  button: { minHeight: 44, borderRadius: 9, paddingHorizontal: 14, paddingVertical: 10, backgroundColor: '#FF7100', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 },
-  buttonText: { color: '#FFFFFF', fontWeight: '600', fontSize: 14 },
-  paymentRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 6 },
-  details: { flexGrow: 1, flexShrink: 1, flexBasis: 155, gap: 6 },
-  paymentTitle: { fontSize: 18, fontWeight: '500', color: '#1F2937' },
-  muted: { fontSize: 13, color: '#606A7C', lineHeight: 20 }, small: { fontSize: 12, color: '#606A7C', lineHeight: 19 },
-  price: { alignItems: 'flex-end' }, priceText: { fontSize: 20, fontWeight: '700', color: '#1F2937' },
-  balanceRow: { flexDirection: 'row', gap: 12, justifyContent: 'space-between', marginTop: 14 },
-  balanceName: { flex: 1, color: '#606A7C', fontSize: 14 }, debt: { fontWeight: '600', fontSize: 14, color: '#B91C1C' },
-  overlay: { flex: 1, backgroundColor: '#17211ECC' }, modalArea: { flex: 1, padding: 20, justifyContent: 'center' },
-  modal: { maxWidth: 448, width: '100%', maxHeight: '100%', alignSelf: 'center', backgroundColor: '#FFFFFF', borderRadius: 20, overflow: 'hidden' },
-  modalContent: { padding: 20 }, modalTitle: { fontSize: 22, fontWeight: '700', color: '#242B3B', flex: 1 },
-  fieldLabel: { fontSize: 14, fontWeight: '600', color: '#424D62', marginTop: 20, marginBottom: 8 },
-  input: { borderWidth: 1, borderColor: '#CBD0D8', borderRadius: 9, minHeight: 48, padding: 12, fontSize: 16, color: '#242B3B', marginBottom: 4 },
-  option: { minHeight: 44, borderWidth: 1, borderColor: '#CBD0D8', borderRadius: 9, padding: 8, justifyContent: 'center' },
-  selected: { borderColor: '#6B8E23', backgroundColor: '#EAF1DF', borderWidth: 2, padding: 7 },
-  optionText: { fontSize: 14, color: '#424D62' }, submit: { marginTop: 24 },
-  paragraph: { color: '#606A7C', fontSize: 14, lineHeight: 22 }, error: { marginTop: 16, color: '#B91C1C', fontSize: 14, lineHeight: 20 },
-});

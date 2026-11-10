@@ -1,9 +1,10 @@
+import { useAppearance, useThemedStyles } from '@/contexts/appearance-context';
 import { useEffect, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppIcon } from '@/components/ui/app-icon';
-import { styles as s } from '@/styles/household.styles';
+import { styles as baseStyles } from '@/styles/household.styles';
 
 type Member = { id: string; name: string; email: string; phone: string; admin: boolean; color: string };
 const initialMembers: Member[] = [
@@ -25,6 +26,8 @@ function initials(name: string) {
 }
 
 export function HouseholdScreen() {
+  const s = useThemedStyles(baseStyles);
+  const { dark } = useAppearance();
   const [members, setMembers] = useState(initialMembers);
   const [dialog, setDialog] = useState<'add' | 'edit' | 'delete' | null>(null);
   const [selected, setSelected] = useState<Member | null>(null);
@@ -68,7 +71,7 @@ export function HouseholdScreen() {
         </View>
         <Text role="heading" style={s.sectionTitle}>Miembros del Hogar</Text>
         {members.map(member => <View key={member.id} style={[s.card, s.memberCard]}><View style={[s.avatar, { backgroundColor: member.color }]}><Text style={s.initials}>{initials(member.name)}</Text></View><View style={s.flex}><View style={s.nameRow}><Text style={s.name}>{member.name}</Text>{member.admin && <View style={s.adminBadge}><AppIcon name="crown" size={12} color="#A16207" /><Text style={s.adminText}>Admin</Text></View>}</View><View style={s.contact}><AppIcon name="mail" size={15} /><Text selectable style={s.contactText}>{member.email}</Text></View><View style={s.contact}><AppIcon name="phone" size={15} /><Text selectable style={s.contactText}>{member.phone}</Text></View></View><View><Pressable accessibilityRole="button" accessibilityLabel={`Editar a ${member.name}`} style={s.action} onPress={() => { setSelected(member); setDraft({ name: member.name, email: member.email, phone: member.phone }); setDialog('edit'); }}><AppIcon name="edit" size={20} color="#5369FF" /></Pressable>{!member.admin && <Pressable accessibilityRole="button" accessibilityLabel={`Eliminar a ${member.name}`} style={s.action} onPress={() => { setSelected(member); setDialog('delete'); }}><AppIcon name="trash" size={20} color="#FF334B" /></Pressable>}</View></View>)}
-        <View style={s.card}><Text role="heading" style={s.cardTitle}>Estadísticas del Hogar</Text><View style={s.stats}>{stats.map(stat => <View key={stat.label} style={[s.stat, { backgroundColor: stat.background }]}><Text style={[s.statValue, { color: stat.color }]}>{stat.value}</Text><Text style={s.statLabel}>{stat.label}</Text></View>)}</View></View>
+        <View style={s.card}><Text role="heading" style={s.cardTitle}>Estadísticas del Hogar</Text><View style={s.stats}>{stats.map(stat => <View key={stat.label} style={[s.stat, { backgroundColor: dark ? '#202020' : stat.background }]}><Text style={[s.statValue, { color: dark ? '#FFFFFF' : stat.color }]}>{stat.value}</Text><Text style={s.statLabel}>{stat.label}</Text></View>)}</View></View>
       </View>
     </ScrollView>
     <Modal visible={dialog !== null} transparent animationType="fade" onRequestClose={close}><SafeAreaView style={s.overlay}><KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={s.modalArea}><View style={s.modal} accessibilityViewIsModal><ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={s.modalContent}>

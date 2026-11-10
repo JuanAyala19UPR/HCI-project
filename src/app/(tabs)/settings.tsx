@@ -1,4 +1,1 @@
-import { SectionPlaceholder } from '@/components/section-placeholder';
-export default function SettingsScreen() {
-  return <SectionPlaceholder title="Ajustes" icon="settings" />;
-}
+export { SettingsScreen as default } from '@/components/settings/settings-screen';

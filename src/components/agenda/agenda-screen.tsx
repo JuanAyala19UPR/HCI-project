@@ -1,13 +1,15 @@
+import { useThemedStyles } from '@/contexts/appearance-context';
 import { useMemo, useState } from 'react';
 import { Modal, Pressable, ScrollView, SectionList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppIcon } from '@/components/ui/app-icon';
 import { useTasks } from '@/contexts/task-context';
-import { styles } from '@/styles/agenda.styles';
+import { styles as baseStyles } from '@/styles/agenda.styles';
 import { addDays, FREQUENCY_COLORS, groupWeekTasks, monthGrid, monthLabel, PERSON_COLORS, shiftMonth, todayDate, WEEKDAYS, weekLabel, weekStart } from '@/utils/weekly_schedule';
 import { formatTaskDate, HOUSE_MEMBERS } from '@/utils/tasks';
 
 export function AgendaScreen() {
+  const styles = useThemedStyles(baseStyles);
   const { tasks } = useTasks();
   // Start with the reference's demo week. The picker also provides a Today action.
   const [start, setStart] = useState('2026-04-20');

@@ -1,13 +1,15 @@
+import { useThemedStyles } from '@/contexts/appearance-context';
 import { useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppIcon } from '@/components/ui/app-icon';
-import { styles } from '@/styles/tasks.styles';
+import { styles as baseStyles } from '@/styles/tasks.styles';
 import { dateInputValue, emptyTask, HOUSE_MEMBERS, parseDateInput, REPEAT_OPTIONS, validateTask, type Task, type TaskDraft } from '@/utils/tasks';
 
 type Props = { task: Task | null; onSave: (draft: TaskDraft, id?: string) => void; onClose: () => void };
 
 export function TaskEditor({ task, onSave, onClose }: Props) {
+  const styles = useThemedStyles(baseStyles);
   const [draft, setDraft] = useState<TaskDraft>(() => task ? {
     text: task.text, assignedTo: task.assignedTo, dueDate: task.dueDate,
     repeatInterval: task.repeatInterval, repeatUntil: task.repeatUntil, notes: task.notes,
