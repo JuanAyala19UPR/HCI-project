@@ -1,0 +1,25 @@
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#87a96b' },
+  flex: { flex: 1 },
+  content: { flexGrow: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16, paddingBottom: 16 },
+  wrapper: { width: '100%', maxWidth: 448 },
+  back: { minHeight: 52, justifyContent: 'center', alignSelf: 'flex-start', paddingRight: 16 },
+  backText: { color: '#FFFFFF', fontSize: 16, fontWeight: '600' },
+  card: { backgroundColor: '#FFFFFF', borderRadius: 24, padding: 32, alignItems: 'center', shadowColor: '#263818', shadowOffset: { width: 0, height: 16 }, shadowOpacity: 0.2, shadowRadius: 24, elevation: 8 },
+  logo: { width: 144, height: 96, marginBottom: 24 },
+  title: { color: '#242B3B', fontSize: 30, fontWeight: '700', textAlign: 'center' },
+  subtitle: { color: '#606A7C', fontSize: 16, textAlign: 'center', marginTop: 8, marginBottom: 32 },
+  field: { width: '100%', marginBottom: 20 },
+  label: { color: '#424D62', fontSize: 14, fontWeight: '500', marginBottom: 6 },
+  input: { minHeight: 48, backgroundColor: '#F3F3F5', borderRadius: 9, paddingHorizontal: 14, paddingVertical: 12, color: '#242B3B', fontSize: 15 },
+  error: { alignSelf: 'stretch', color: '#B42318', marginBottom: 16, fontSize: 14 },
+  button: { width: '100%', minHeight: 48, justifyContent: 'center', alignItems: 'center', backgroundColor: '#3CC646', borderRadius: 8, padding: 14 },
+  pressed: { opacity: 0.8 },
+  buttonText: { color: '#FFFFFF', fontSize: 18, fontWeight: '600', textAlign: 'center' },
+  loginRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', marginTop: 16 },
+  loginText: { color: '#606A7C', fontSize: 15 },
+  loginLink: { minHeight: 44, justifyContent: 'center' },
+  linkText: { color: '#249D31', fontSize: 15, fontWeight: '600' },
+});
