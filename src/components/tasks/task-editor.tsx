@@ -6,9 +6,9 @@ import { AppIcon } from '@/components/ui/app-icon';
 import { styles as baseStyles } from '@/styles/tasks.styles';
 import { dateInputValue, emptyTask, HOUSE_MEMBERS, parseDateInput, REPEAT_OPTIONS, validateTask, type Task, type TaskDraft } from '@/utils/tasks';
 
-type Props = { task: Task | null; onSave: (draft: TaskDraft, id?: string) => void; onClose: () => void };
+type Props = { task: Task | null; onSave: (draft: TaskDraft, id?: string) => void; onDelete: (id: string) => void; onClose: () => void };
 
-export function TaskEditor({ task, onSave, onClose }: Props) {
+export function TaskEditor({ task, onSave, onDelete, onClose }: Props) {
   const styles = useThemedStyles(baseStyles);
   const [draft, setDraft] = useState<TaskDraft>(() => task ? {
     text: task.text, assignedTo: task.assignedTo, dueDate: task.dueDate,
@@ -18,7 +18,8 @@ export function TaskEditor({ task, onSave, onClose }: Props) {
   const [untilInput, setUntilInput] = useState(dateInputValue(draft.repeatUntil));
   const [errors, setErrors] = useState<ReturnType<typeof validateTask>>({});
   const [dirty, setDirty] = useState(false);
-  const [confirmClose, setConfirmClose] = useState(false);
+  const [confirmation, setConfirmation] = useState<'discard' | 'delete' | null>(null);
+  const confirmingDelete = confirmation === 'delete';
 
   function update<K extends keyof TaskDraft>(key: K, value: TaskDraft[K]) {
     setDraft(current => ({ ...current, [key]: value }));
@@ -26,8 +27,13 @@ export function TaskEditor({ task, onSave, onClose }: Props) {
     setDirty(true);
   }
   function requestClose() {
-    if (dirty) setConfirmClose(true);
+    if (confirmation) setConfirmation(null);
+    else if (dirty) setConfirmation('discard');
     else onClose();
+  }
+  function confirmAction() {
+    if (confirmingDelete && task) onDelete(task.id);
+    onClose();
   }
   function save() {
     const validation = validateTask(draft);
@@ -45,13 +51,13 @@ export function TaskEditor({ task, onSave, onClose }: Props) {
       <KeyboardAvoidingView style={styles.overlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <SafeAreaView style={styles.modalSafe}>
           <View style={styles.modalCard} accessibilityViewIsModal>
-            {confirmClose ? (
+            {confirmation ? (
               <View style={styles.modalContent}>
-                <Text role="heading" style={styles.modalTitle}>¿Descartar cambios?</Text>
-                <Text style={styles.description}>Los cambios que no hayas guardado se perderán.</Text>
+                <Text role="heading" style={styles.modalTitle}>{confirmingDelete ? '¿Eliminar tarea?' : '¿Descartar cambios?'}</Text>
+                <Text style={styles.description}>{confirmingDelete && task ? `Se eliminará «${task.text}». Esta acción no se puede deshacer.` : 'Los cambios que no hayas guardado se perderán.'}</Text>
                 <View style={styles.footer}>
-                  <Pressable accessibilityRole="button" style={styles.secondaryButton} onPress={() => setConfirmClose(false)}><Text style={styles.secondaryText}>Seguir editando</Text></Pressable>
-                  <Pressable accessibilityRole="button" style={[styles.primaryButton, styles.dangerButton]} onPress={onClose}><Text style={styles.buttonText}>Descartar</Text></Pressable>
+                  <Pressable accessibilityRole="button" style={styles.secondaryButton} onPress={() => setConfirmation(null)}><Text style={styles.secondaryText}>{confirmingDelete ? 'Cancelar' : 'Seguir editando'}</Text></Pressable>
+                  <Pressable accessibilityRole="button" style={[styles.primaryButton, styles.dangerButton]} onPress={confirmAction}><Text style={styles.buttonText}>{confirmingDelete ? 'Eliminar' : 'Descartar'}</Text></Pressable>
                 </View>
               </View>
             ) : (
@@ -96,6 +102,7 @@ export function TaskEditor({ task, onSave, onClose }: Props) {
                 <View style={styles.footer}>
                   <Pressable accessibilityRole="button" onPress={requestClose} style={styles.secondaryButton}><Text style={styles.secondaryText}>Cancelar</Text></Pressable>
                   <Pressable accessibilityRole="button" onPress={save} style={({ pressed }) => [styles.primaryButton, task && styles.editButton, pressed && styles.pressed]}><Text style={styles.buttonText}>{task ? 'Guardar' : 'Agregar'}</Text></Pressable>
+                  {task && <Pressable accessibilityRole="button" onPress={() => setConfirmation('delete')} style={[styles.primaryButton, styles.dangerButton]}><Text style={styles.buttonText}>Eliminar</Text></Pressable>}
                 </View>
               </ScrollView>
             )}

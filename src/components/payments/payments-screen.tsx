@@ -59,12 +59,16 @@ export function PaymentsScreen() {
   return <View style={s.screen}>
     <ScrollView contentContainerStyle={s.content}>
       <SafeAreaView edges={['top', 'left', 'right']} style={s.header}>
-        <View style={s.row}><Text role="heading" style={s.title}>Pagos Compartidos</Text><Pressable accessibilityRole="button" accessibilityLabel="Ayuda sobre pagos compartidos" style={s.icon} onPress={() => setDialog('help')}><Text style={s.help}>?</Text></Pressable></View>
-        <Text style={s.headerNote}>Mes actual: Abril 2026</Text>
+        <View style={s.monthRow}>
+          <Text style={s.headerNote}>Mes actual: Abril 2026</Text>
+          <Pressable accessibilityRole="button" accessibilityLabel="Ayuda sobre pagos compartidos" style={s.icon} onPress={() => setDialog('help')}>
+            <Text style={s.help}>?</Text>
+          </Pressable>
+        </View>
         <View style={s.row}>{[['Total Gastado', total], ['Tu Parte', myShare]].map(([label, amount]) => <View key={label} style={s.summary}><Text style={s.white}>{label} ⓘ</Text><Text style={s.amount}>{money(Number(amount))}</Text><Text style={s.summaryNote}>Este mes</Text></View>)}</View>
       </SafeAreaView>
       <View style={s.card}><Text style={s.label}>Categorías disponibles</Text><View style={s.wrap}>{(Object.keys(categories) as Category[]).map(c => <Badge key={c} category={c} />)}</View></View>
-      <View style={s.section}><Text role="heading" style={s.heading}>Últimos Pagos</Text><Pressable accessibilityRole="button" style={s.button} onPress={() => setDialog('add')}><AppIcon name="plus" color="#FFFFFF" size={18} /><Text style={s.buttonText}>Agregar</Text></Pressable></View>
+      <View style={s.section}><Text role="heading" style={s.heading}>Últimos Pagos</Text><Pressable accessibilityRole="button" style={s.button} onPress={() => setDialog('add')}><AppIcon name="plus" color="#FFFFFF" size={18} /></Pressable></View>
       {payments.map(p => <View key={p.id} style={s.card}><View style={s.paymentRow}><View style={s.details}><View style={s.wrap}><Text style={s.paymentTitle}>{p.description}</Text><Badge category={p.category} /></View><Text style={s.muted}>Pagado por {p.paidBy} · {p.date}</Text></View><View style={s.price}><Text style={s.priceText}>{money(p.cents)}</Text><Text style={s.small}>{money(p.cents / (p.splitWith.length + 1))} por persona</Text></View></View><Text style={s.small}>Dividido con: {p.splitWith.join(', ')}</Text></View>)}
       <View style={s.card}><Text role="heading" style={s.heading}>Balance</Text>{balances.map(b => <View key={`${b.from}-${b.to}`} style={s.balanceRow}><Text style={s.balanceName}>{b.from} debe a {b.to}</Text><Text style={s.debt}>{money(b.cents)}</Text></View>)}{!balances.length && <Text style={s.muted}>Todos están al día.</Text>}</View>
     </ScrollView>

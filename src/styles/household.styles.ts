@@ -15,8 +15,11 @@ export const styles = StyleSheet.create({
   infoTitle: { color: '#374151', fontSize: 11, fontWeight: '700' }, infoText: { color: '#606A7C', fontSize: 11, lineHeight: 17 },
   primary: { minHeight: 44, backgroundColor: '#3BC54B', borderRadius: 8, flexDirection: 'row', gap: 12, alignItems: 'center', justifyContent: 'center', padding: 12, marginTop: 12 },
   primaryText: { color: '#FFFFFF', fontSize: 14, fontWeight: '600' }, feedback: { fontSize: 12, color: '#427222', marginTop: 8 },
-  sectionTitle: { fontSize: 18, color: '#424D62', fontWeight: '600', marginTop: 8 },
+  membersHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
+  sectionTitle: { fontSize: 18, color: '#424D62', fontWeight: '600', flexShrink: 1 },
+  addMemberButton: { minWidth: 44, marginTop: 0 },
   memberCard: { flexDirection: 'row', alignItems: 'flex-start', padding: 16, gap: 14 },
+  pressed: { opacity: 0.75 },
   avatar: { width: 56, height: 56, borderRadius: 28, alignItems: 'center', justifyContent: 'center' }, initials: { color: '#FFFFFF', fontSize: 18 },
   nameRow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6, marginBottom: 6 }, name: { color: '#1F2937', fontSize: 16, fontWeight: '600' },
   adminBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: '#FEF9C3', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6 }, adminText: { color: '#A16207', fontSize: 11 },
@@ -33,4 +36,5 @@ export const styles = StyleSheet.create({
   footer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 12, marginTop: 24 },
   cancel: { minHeight: 44, padding: 12, borderWidth: 1, borderColor: '#CBD0D8', borderRadius: 8, alignItems: 'center', justifyContent: 'center' }, cancelText: { color: '#424D62', fontWeight: '600' },
   confirm: { marginTop: 0, paddingHorizontal: 20 }, danger: { backgroundColor: '#DC2626' },
+  disabled: { opacity: 0.55 },
 });
