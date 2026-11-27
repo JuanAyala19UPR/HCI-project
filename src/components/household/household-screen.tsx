@@ -37,6 +37,17 @@ export function HouseholdScreen() {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
   const close = () => { setDialog(null); setSelected(null); setDraft(blank); setError(''); };
+  const dismiss = () => dialog === 'delete' ? setDialog('edit') : close();
+  function editMember(member: Member) {
+    setSelected(member);
+    setDraft({ name: member.name, email: member.email, phone: member.phone });
+    setDialog('edit');
+  }
+  function deleteMember() {
+    if (!selected || selected.admin) return;
+    setMembers(current => current.filter(member => member.id !== selected.id));
+    close();
+  }
   async function copyCode() {
     try {
       const copied = await Clipboard.setStringAsync('ABC123');
@@ -63,19 +74,27 @@ export function HouseholdScreen() {
     <ScrollView contentContainerStyle={s.content}>
       <SafeAreaView edges={['top', 'left', 'right']} style={s.header}><View style={s.headerRow}><View style={s.homeIcon}><AppIcon name="home" size={30} color="#FFFFFF" /></View><View style={s.flex}><Text role="heading" style={s.title}>Kassa Roomie</Text><Text style={s.memberCount}>{members.length} miembros</Text></View></View></SafeAreaView>
       <View style={s.body}>
-        <View style={s.card}><Text style={s.cardTitle}>Código de Invitación</Text><Text style={s.description}>Comparte este código con tus familiares para que se unan</Text>
-          <View style={s.codeRow}><View style={s.codeBox}><Text selectable style={s.code}>ABC123</Text></View><Pressable accessibilityRole="button" accessibilityLabel="Copiar código de invitación" style={s.copyButton} onPress={copyCode}><AppIcon name={copyStatus === 'Código copiado' ? 'check' : 'copy'} size={20} color="#374151" /></Pressable></View>
-          {!!copyStatus && <Text accessibilityLiveRegion="polite" style={s.feedback}>{copyStatus}</Text>}
-          <View style={s.info}><Text style={s.infoTitle}>📌 Información importante:</Text><Text style={s.infoText}>•  El código no expira y puede usarse múltiples veces</Text><Text style={s.infoText}>•  Solo administradores pueden regenerar el código</Text><Text style={s.infoText}>•  Cualquier persona con el código puede unirse al hogar</Text></View>
-          <Pressable accessibilityRole="button" style={s.primary} onPress={() => setDialog('add')}><AppIcon name="plus" size={18} color="#FFFFFF" /><Text style={s.primaryText}>Agregar Miembro</Text></Pressable>
+        <View style={s.membersHeader}>
+          <Text role="heading" style={s.sectionTitle}>Miembros del Hogar</Text>
+          <Pressable accessibilityRole="button" accessibilityLabel="Agregar miembro" style={({ pressed }) => [s.primary, s.addMemberButton, pressed && s.pressed]} onPress={() => setDialog('add')}>
+            <AppIcon name="plus" size={18} color="#FFFFFF" />
+          </Pressable>
         </View>
-        <Text role="heading" style={s.sectionTitle}>Miembros del Hogar</Text>
-        {members.map(member => <View key={member.id} style={[s.card, s.memberCard]}><View style={[s.avatar, { backgroundColor: member.color }]}><Text style={s.initials}>{initials(member.name)}</Text></View><View style={s.flex}><View style={s.nameRow}><Text style={s.name}>{member.name}</Text>{member.admin && <View style={s.adminBadge}><AppIcon name="crown" size={12} color="#A16207" /><Text style={s.adminText}>Admin</Text></View>}</View><View style={s.contact}><AppIcon name="mail" size={15} /><Text selectable style={s.contactText}>{member.email}</Text></View><View style={s.contact}><AppIcon name="phone" size={15} /><Text selectable style={s.contactText}>{member.phone}</Text></View></View><View><Pressable accessibilityRole="button" accessibilityLabel={`Editar a ${member.name}`} style={s.action} onPress={() => { setSelected(member); setDraft({ name: member.name, email: member.email, phone: member.phone }); setDialog('edit'); }}><AppIcon name="edit" size={20} color="#5369FF" /></Pressable>{!member.admin && <Pressable accessibilityRole="button" accessibilityLabel={`Eliminar a ${member.name}`} style={s.action} onPress={() => { setSelected(member); setDialog('delete'); }}><AppIcon name="trash" size={20} color="#FF334B" /></Pressable>}</View></View>)}
+        {members.map(member => (
+          <Pressable key={member.id} accessibilityRole="button" accessibilityHint="Abre el editor del miembro" style={({ pressed }) => [s.card, s.memberCard, pressed && s.pressed]} onPress={() => editMember(member)}>
+            <View style={[s.avatar, { backgroundColor: member.color }]}><Text style={s.initials}>{initials(member.name)}</Text></View>
+            <View style={s.flex}>
+              <View style={s.nameRow}><Text style={s.name}>{member.name}</Text>{member.admin && <View style={s.adminBadge}><AppIcon name="crown" size={12} color="#A16207" /><Text style={s.adminText}>Admin</Text></View>}</View>
+              <View style={s.contact}><AppIcon name="mail" size={15} /><Text selectable style={s.contactText}>{member.email}</Text></View>
+              <View style={s.contact}><AppIcon name="phone" size={15} /><Text selectable style={s.contactText}>{member.phone}</Text></View>
+            </View>
+          </Pressable>
+        ))}
         <View style={s.card}><Text role="heading" style={s.cardTitle}>Estadísticas del Hogar</Text><View style={s.stats}>{stats.map(stat => <View key={stat.label} style={[s.stat, { backgroundColor: dark ? '#202020' : stat.background }]}><Text style={[s.statValue, { color: dark ? '#FFFFFF' : stat.color }]}>{stat.value}</Text><Text style={s.statLabel}>{stat.label}</Text></View>)}</View></View>
       </View>
     </ScrollView>
-    <Modal visible={dialog !== null} transparent animationType="fade" onRequestClose={close}><SafeAreaView style={s.overlay}><KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={s.modalArea}><View style={s.modal} accessibilityViewIsModal><ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={s.modalContent}>
-      <View style={s.modalHeader}><Text role="heading" style={s.modalTitle}>{dialog === 'delete' ? 'Eliminar Miembro' : dialog === 'edit' ? 'Editar Miembro' : 'Agregar Nuevo Miembro'}</Text><Pressable accessibilityRole="button" accessibilityLabel="Cerrar" style={s.action} onPress={close}><AppIcon name="close" /></Pressable></View>
+    <Modal visible={dialog !== null} transparent animationType="fade" onRequestClose={dismiss}><SafeAreaView style={s.overlay}><KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={s.modalArea}><View style={s.modal} accessibilityViewIsModal><ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={s.modalContent}>
+      <View style={s.modalHeader}><Text role="heading" style={s.modalTitle}>{dialog === 'delete' ? 'Eliminar Miembro' : dialog === 'edit' ? 'Editar Miembro' : 'Agregar Nuevo Miembro'}</Text><Pressable accessibilityRole="button" accessibilityLabel="Cerrar" style={s.action} onPress={dismiss}><AppIcon name="close" /></Pressable></View>
       {dialog === 'delete' ? <Text style={s.description}>¿Quieres eliminar a {selected?.name} del hogar? Esta acción no se puede deshacer.</Text> : <>
         <Text style={s.description}>{dialog === 'edit' ? 'Actualiza la información del miembro' : 'Ingresa los datos del nuevo miembro del hogar'}</Text>
         <Text style={s.fieldLabel}>Nombre completo *</Text><TextInput accessibilityLabel="Nombre completo obligatorio" style={s.input} placeholder="Ej: Carlos Rodríguez" placeholderTextColor="#788092" value={draft.name} maxLength={100} onChangeText={name => setDraft(current => ({ ...current, name }))} />
@@ -83,7 +102,16 @@ export function HouseholdScreen() {
         <Text style={s.fieldLabel}>Teléfono *</Text><TextInput accessibilityLabel="Teléfono obligatorio" style={s.input} placeholder="+1 787 123 4567" placeholderTextColor="#788092" value={draft.phone} maxLength={25} keyboardType="phone-pad" onChangeText={phone => setDraft(current => ({ ...current, phone }))} /><Text style={s.hint}>Debe iniciar con +1 787</Text>
         {!!error && <Text accessibilityRole="alert" style={s.error}>{error}</Text>}
       </>}
-      <View style={s.footer}><Pressable accessibilityRole="button" style={s.cancel} onPress={close}><Text style={s.cancelText}>Cancelar</Text></Pressable><Pressable accessibilityRole="button" style={[s.primary, s.confirm, dialog === 'delete' && s.danger]} onPress={dialog === 'delete' ? () => { if (selected && !selected.admin) setMembers(current => current.filter(m => m.id !== selected.id)); close(); } : save}><Text style={s.primaryText}>{dialog === 'delete' ? 'Eliminar' : dialog === 'edit' ? 'Guardar' : 'Agregar'}</Text></Pressable></View>
+      <View style={s.footer}>
+        <Pressable accessibilityRole="button" style={s.cancel} onPress={dismiss}><Text style={s.cancelText}>Cancelar</Text></Pressable>
+        <Pressable accessibilityRole="button" style={[s.primary, s.confirm, dialog === 'delete' && s.danger]} onPress={dialog === 'delete' ? deleteMember : save}><Text style={s.primaryText}>{dialog === 'delete' ? 'Eliminar' : dialog === 'edit' ? 'Guardar' : 'Agregar'}</Text></Pressable>
+        {dialog === 'edit' && selected && (
+          <Pressable accessibilityRole="button" accessibilityState={{ disabled: selected.admin }} disabled={selected.admin} style={[s.primary, s.confirm, s.danger, selected.admin && s.disabled]} onPress={() => setDialog('delete')}>
+            <Text style={s.primaryText}>Eliminar</Text>
+          </Pressable>
+        )}
+      </View>
+      {dialog === 'edit' && selected?.admin && <Text style={s.hint}>La cuenta administradora está protegida contra la eliminación.</Text>}
     </ScrollView></View></KeyboardAvoidingView></SafeAreaView></Modal>
   </View>;
 }

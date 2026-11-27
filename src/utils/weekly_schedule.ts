@@ -3,7 +3,7 @@ import type { Task, RepeatInterval } from './tasks';
 export const WEEKDAYS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 export const PERSON_COLORS: Record<string, string> = {
-  Natalia: '#DF2D9C', Alejandro: '#35B948', Juan: '#5078FF', José: '#ED2849', Roberto: '#697386',
+  Natalia: '#DF2D9C', Alejandro: '#35B948', Juan: '#5078FF', José: '#ED2849',
 };
 export const FREQUENCY_COLORS: Record<RepeatInterval, string> = {
   'No se repite': '#268A3A', Diario: '#3D59F5', 'Cada 3 días': '#9455D8',

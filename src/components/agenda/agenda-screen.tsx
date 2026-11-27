@@ -40,7 +40,6 @@ export function AgendaScreen() {
           <Pressable accessibilityRole="button" accessibilityLabel="Semana siguiente" style={styles.iconButton} onPress={() => selectWeek(addDays(start, 7))}><AppIcon name="chevronRight" color="#FFFFFF" size={20} /></Pressable>
         </View>
         <View style={styles.headingRow}>
-          <Text role="heading" style={styles.title}>Agenda Semanal</Text>
           {selectedDay && <Pressable accessibilityRole="button" style={styles.allButton} onPress={() => setSelectedDay(null)}><Text style={styles.allText}>Ver todas</Text></Pressable>}
         </View>
       </SafeAreaView>

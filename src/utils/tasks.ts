@@ -1,5 +1,5 @@
 export const CURRENT_USER = 'Natalia';
-export const HOUSE_MEMBERS = ['Natalia', 'Alejandro', 'Juan', 'José', 'Roberto'] as const;
+export const HOUSE_MEMBERS = ['Natalia', 'Alejandro', 'Juan', 'José'] as const;
 export const REPEAT_OPTIONS = ['No se repite', 'Diario', 'Cada 3 días', 'Semanal', 'Quincenal', 'Mensual'] as const;
 export type RepeatInterval = (typeof REPEAT_OPTIONS)[number];
 
@@ -77,7 +77,7 @@ export const INITIAL_TASKS: Task[] = [
     ['Regar plantas', 'Juan', '2026-04-23', 'Cada 3 días', '2026-05-23', false],
     ['Limpieza general', 'José', '2026-04-22', 'Semanal', '2026-06-22', false],
     ['Cocinar cena', 'José', '2026-04-22', 'Diario', '2026-05-22', false],
-    ['Compras supermercado', 'Roberto', '2026-04-24', 'Semanal', '2026-06-24', false],
+    ['Compras supermercado', 'Alejandro', '2026-04-24', 'Semanal', '2026-06-24', false],
     ['Revisar cuentas', 'Alejandro', '2026-04-25', 'No se repite', '', false],
     ['Hacer ejercicio', 'Natalia', '2026-04-22', 'Diario', '2026-05-22', true],
   ] satisfies [string, string, string, RepeatInterval, string, boolean][]).map(([text, assignedTo, dueDate, repeatInterval, repeatUntil, completed], index) => ({

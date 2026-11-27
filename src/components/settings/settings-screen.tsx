@@ -39,7 +39,6 @@ export function SettingsScreen() {
     return <View style={[s.row, disabled && s.disabled]}><AppIcon name={icon} color={dark ? '#FFFFFF' : '#606A7C'} size={20} /><View style={s.flex}><Text style={s.rowText}>{label}</Text><Text style={s.small}>{subtitle}</Text></View><Switch accessibilityLabel={label} value={value} onValueChange={change} disabled={disabled} trackColor={{ false: '#CBCDD3', true: dark ? '#657AFF' : '#09091B' }} thumbColor="#FFFFFF" /></View>;
   }
   return <View style={s.screen}><ScrollView contentContainerStyle={s.content}>
-    <SafeAreaView edges={['top', 'left', 'right']} style={s.header}><Text role="heading" style={s.title}>Configuración</Text></SafeAreaView>
     <View style={s.body}>
       <View style={[s.card, s.profile]}><View style={s.avatar}><Text style={s.avatarText}>{profile.name.trim().split(/\s+/).map(part => part[0]).slice(0, 2).join('').toUpperCase()}</Text></View><View style={s.flex}><Text style={s.profileName}>{profile.name}</Text><Text style={s.small}>{profile.email}</Text></View><Pressable accessibilityRole="button" style={s.edit} onPress={() => open('profile')}><Text style={s.editText}>Editar</Text></Pressable></View>
       {card('Cuenta', <>{row('user', 'Información Personal', () => open('personal'))}{row('lock', 'Cambiar Contraseña', () => open('password'))}</>)}
